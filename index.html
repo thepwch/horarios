@@ -36,9 +36,8 @@
     </main>
 
     <div class="comentarios-section">
-        <h3>📝 Notas de la Semana</h3>
-        <div id="listaComentarios" class="comentarios-lista">
-            </div>
+        <h3 style="font-size: 12px; color: #aaa; margin: 0 0 5px 0; text-transform: uppercase;">Notas</h3>
+        <div id="listaComentarios" class="comentarios-lista"></div>
     </div>
 
     <div id="editModal" class="modal">
@@ -62,7 +61,7 @@
                     <label><input type="radio" name="oliUbicacion" value="G"> <span>Guarangos</span></label>
                     <label><input type="radio" name="oliUbicacion" value="C"> <span>Calle 11</span></label>
                 </div>
-                <button onclick="aplicarBloqueOli()" class="btn btn-outline">Aplicar a pantalla</button>
+                <button onclick="aplicarBloqueOli()" class="btn btn-outline">Registrar donde está Oli</button>
             </div>
 
             <div class="card card-flor">
@@ -71,7 +70,7 @@
                     <label>Hora de Ingreso: <select id="florIngreso" style="width:100%; margin-top:5px;"></select></label>
                 </div>
                 <p class="hint-text">* Se asignarán 9 horas consecutivas.</p>
-                <button onclick="aplicarTurnoFlor()" class="btn btn-outline" style="background:white;">Calcular Turno</button>
+                <button onclick="aplicarTurnoFlor()" class="btn btn-outline" style="background:white;">Registrar turno</button>
             </div>
 
             <div style="margin-bottom:20px;">

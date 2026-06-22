@@ -141,12 +141,13 @@ function renderizarTabla(datosSemana) {
         let comentario = datosSemana[dia].comentarios;
         if (comentario && comentario.trim() !== "") {
             hayComentarios = true;
-            listaComentarios.innerHTML += `<p style="margin: 5px 0;"><strong>${dia}:</strong> ${comentario}</p>`;
+            // Solo el comentario, minimalista
+            listaComentarios.innerHTML += `<p><strong>${dia}:</strong> ${comentario}</p>`;
         }
     });
 
     if (!hayComentarios) {
-        listaComentarios.innerHTML = '<p style="color: #999; margin: 5px 0; font-size:13px;"><em>No hay notas guardadas.</em></p>';
+        listaComentarios.innerHTML = '<p style="color: #ccc;"><em>Sin notas.</em></p>';
     }
 }
 
@@ -302,19 +303,21 @@ window.aplicarTurnoFlor = function() {
 };
 
 // 4. GUARDAR EN BASE DE DATOS (FIREBASE)
-// 4. GUARDAR EN BASE DE DATOS (FIREBASE CORREGIDO)
 window.guardarDiaEnFirebase = async function() {
     try {
-        // Guardamos el comentario escrito
+        // 1. Guardamos el comentario escrito en la memoria local
         semanaDePrueba[diaSeleccionado].comentarios = document.getElementById('comentariosDia').value;
         
+        // 2. Guardamos en Firebase
         const semanaRef = doc(db, "semanas", semanaActualId);
-        
-        // Ahora guardamos TODA la estructura de la semana completa en un solo bloque
         await setDoc(semanaRef, semanaDePrueba);
         
-        alert(`¡Excelente! Los horarios guardados correctamente.`);
-        document.getElementById('editModal').style.display = 'none'; // Cerramos el panel
+        // --- AQUÍ ESTÁ EL CAMBIO ---
+        // 3. Refrescamos la tabla inmediatamente para que el comentario aparezca abajo
+        renderizarTabla(semanaDePrueba);
+        
+        alert(`¡Excelente! Los horarios y comentarios se guardaron.`);
+        cerrarModalAnimado(); // Cerramos el panel
         
     } catch (error) {
         console.error("Error guardando datos:", error);
