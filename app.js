@@ -87,51 +87,42 @@ function renderizarTabla(datosSemana) {
     const subHeaderEntidades = document.getElementById('subHeaderEntidades');
     const tableBody = document.getElementById('tableBody');
 
-    // Limpiamos contenido anterior manteniendo la primera columna fija
-    headerDias.innerHTML = '<th class="sticky-col">Horario</th>';
-    subHeaderEntidades.innerHTML = '<td class="sticky-col">Entidad</td>';
+    // Limpiamos contenido anterior
+    headerDias.innerHTML = '<th class="sticky-col"></th>';
+    subHeaderEntidades.innerHTML = '<td class="sticky-col"></td>';
     tableBody.innerHTML = '';
 
-    // Calculamos qué día fue el Lunes de la semana que estamos viendo
     let fechaLunes = obtenerLunes(fechaActualVista);
 
-    // Diccionario para convertir los nombres largos a 3 letras
     const nombresCortos = {
-        "Lunes": "Lun",
-        "Martes": "Mar",
-        "Miércoles": "Mie",
-        "Jueves": "Jue",
-        "Viernes": "Vie",
-        "Sábado": "Sab"
+        "Lunes": "Lun", "Martes": "Mar", "Miércoles": "Mie",
+        "Jueves": "Jue", "Viernes": "Vie", "Sábado": "Sab"
     };
 
-    // 1. Crear las columnas de los días dinámicamente
+    // 1. Crear columnas de los días (Con raya separadora fin-dia)
     diasSemana.forEach((dia, index) => {
-        // Calculamos la fecha exacta sumando días al Lunes
         let fechaDelDia = new Date(fechaLunes);
         fechaDelDia.setDate(fechaLunes.getDate() + index);
         
-        let numeroDia = fechaDelDia.getDate(); // Saca el número (Ej: 21)
-        let nombreCorto = nombresCortos[dia]; // Saca las 3 letras (Ej: Lun)
-        
-        // Creamos el nuevo formato "Lun 21" (sin el paréntesis de plantilla)
-        let tituloDia = `${nombreCorto} ${numeroDia}`;
+        let tituloDia = `${nombresCortos[dia]} ${fechaDelDia.getDate()}`;
 
-        // Insertamos el título en la tabla. Mantenemos el 'dia' original en la función abrirModalEdicion para que la base de datos siga funcionando igual.
-        headerDias.innerHTML += `<th colspan="2" class="dia-header" style="cursor:pointer;" onclick="abrirModalEdicion('${dia}')">${tituloDia}</th>`;
-        subHeaderEntidades.innerHTML += `<td>Oli</td><td>Flor</td>`;
+        // El th del día tiene la clase 'fin-dia'
+        headerDias.innerHTML += `<th colspan="2" class="dia-header fin-dia" style="cursor:pointer;" onclick="abrirModalEdicion('${dia}')">${tituloDia}</th>`;
+        
+        // Reducimos "Oli" y "Flor" a "O" y "F" para ganar espacio
+        subHeaderEntidades.innerHTML += `<td>O</td><td class="fin-dia">F</td>`;
     });
 
-    // 2. Crear las filas por cada bloque horario
+    // 2. Crear filas de horarios
     bloquesHorarios.forEach(bloque => {
         let filaHTML = `<tr><td class="sticky-col">${bloque}</td>`;
         
         diasSemana.forEach(dia => {
             let dataBloque = datosSemana[dia].bloques[bloque] || { oli: "", flor: "" };
             
-            // Asignamos clases de color según el Diccionario de Datos
             let claseOli = dataBloque.oli ? `celda-${dataBloque.oli.toLowerCase()}` : '';
-            let claseFlor = dataBloque.flor ? `celda-${dataBloque.flor.toLowerCase()}` : '';
+            // A Flor SIEMPRE le ponemos la clase fin-dia para dibujar la línea blanca
+            let claseFlor = dataBloque.flor ? `celda-${dataBloque.flor.toLowerCase()} fin-dia` : 'fin-dia';
 
             filaHTML += `<td class="${claseOli}">${dataBloque.oli}</td>`;
             filaHTML += `<td class="${claseFlor}">${dataBloque.flor}</td>`;
@@ -141,22 +132,21 @@ function renderizarTabla(datosSemana) {
         tableBody.innerHTML += filaHTML;
     });
 
-    // --- NUEVO: Mostrar comentarios debajo de la tabla ---
+    // Mostrar comentarios abajo
     const listaComentarios = document.getElementById('listaComentarios');
-    listaComentarios.innerHTML = ''; // Limpiamos
+    listaComentarios.innerHTML = ''; 
     let hayComentarios = false;
 
     diasSemana.forEach(dia => {
         let comentario = datosSemana[dia].comentarios;
         if (comentario && comentario.trim() !== "") {
             hayComentarios = true;
-            // Mostramos el nombre del día y su comentario
             listaComentarios.innerHTML += `<p style="margin: 5px 0;"><strong>${dia}:</strong> ${comentario}</p>`;
         }
     });
 
     if (!hayComentarios) {
-        listaComentarios.innerHTML = '<p style="color: #999; margin: 5px 0;"><em>No hay notas guardadas esta semana.</em></p>';
+        listaComentarios.innerHTML = '<p style="color: #999; margin: 5px 0; font-size:13px;"><em>No hay notas guardadas.</em></p>';
     }
 }
 
