@@ -1,34 +1,44 @@
-// Arreglo base de horas del día
-const bloquesHorarios = [
-    "Despertar", "09:00", "10:00", "11:00", "12:00", 
-    "13:00", "14:00", "15:00", "16:00", "17:00", 
-    "18:00", "19:00", "20:00", "21:00", "Dormir"
-];
+// 1. Importamos Firebase directamente desde internet
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
-// Requisito Funcional: Turno automático de 9 horas para Flor
-function aplicarTurnoFlor() {
-    const horaIngresoStr = document.getElementById('florStartTime').value; 
-    if(!horaIngresoStr) return;
+// 2. PEGA TU CONFIGURACIÓN AQUÍ (Reemplaza este bloque con el tuyo)
+const firebaseConfig = {
+  apiKey: "AIzaSyBjWow7Mhbw00VvnILjDFObBJX059_ANro",
+  authDomain: "horariosbd.firebaseapp.com",
+  projectId: "horariosbd",
+  storageBucket: "horariosbd.firebasestorage.app",
+  messagingSenderId: "764174890234",
+  appId: "1:764174890234:web:fad07ee9f7cd5214dbc543"
+};
 
-    const horaIngreso = parseInt(horaIngresoStr.split(":")[0]); // Extrae la hora (ej. 12)
-    
-    // Calcula los bloques que serán marcados como "F" (9 horas consecutivas)
-    let bloquesAsignados = 0;
-    bloquesHorarios.forEach(bloque => {
-        if(bloque === "Despertar" || bloque === "Dormir") return;
-        
-        let horaBloque = parseInt(bloque.split(":")[0]);
-        if (horaBloque >= horaIngreso && bloquesAsignados < 9) {
-            console.log(`Marcando ${bloque} como F (Presente)`);
-            bloquesAsignados++;
-            // Aquí iría el código para pintar la celda de HTML y guardar en el objeto de la base de datos
-        }
-    });
+// 3. Inicializamos la App y la Base de Datos
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-    alert(`Turno de 9 horas aplicado desde las ${horaIngresoStr}`);
+// 4. FUNCIÓN DE PRUEBA: Guardar un dato
+async function guardarTurnoPrueba() {
+    try {
+        // "horarios" es el nombre de tu tabla en la base de datos
+        const docRef = await addDoc(collection(db, "horarios"), {
+            dia: "Lunes 15",
+            horaIngresoFlor: "12:00",
+            comentarios: "Prueba desde mi PC"
+        });
+        console.log("¡Dato guardado con el ID: ", docRef.id);
+        alert("¡Base de datos conectada y dato guardado!");
+    } catch (e) {
+        console.error("Error al guardar: ", e);
+    }
 }
 
-// Lógica para abrir/cerrar modal al tocar una columna
-document.getElementById('closeModal').addEventListener('click', () => {
-    document.getElementById('editModal').style.display = 'none';
-});
+// 5. FUNCIÓN DE PRUEBA: Leer los datos
+async function leerDatos() {
+    const querySnapshot = await getDocs(collection(db, "horarios"));
+    querySnapshot.forEach((doc) => {
+        console.log("Dato recuperado:", doc.id, " => ", doc.data());
+    });
+}
+
+// Ejecutamos la función para probar
+guardarTurnoPrueba();
