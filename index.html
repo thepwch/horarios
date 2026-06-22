@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horarios Oli y Flor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="app-header">
+        <button id="prevWeek">&lt;</button>
+        <h2 id="weekTitle">Semana del 11 al 17 de Mayo</h2>
+        <button id="nextWeek">&gt;</button>
+    </header>
+
+    <main class="table-container">
+        <table id="horarioTable">
+            <thead>
+                <tr>
+                    <th class="sticky-col">Horario</th>
+                    <th colspan="2">Lun 11 (Miraflores)</th>
+                    <th colspan="2">Mie 13 (Guarangos)</th>
+                </tr>
+                <tr class="sub-header">
+                    <td class="sticky-col">Entidad</td>
+                    <td>Oli</td><td>Flor</td>
+                    <td>Oli</td><td>Flor</td>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                </tbody>
+        </table>
+    </main>
+
+    <div id="editModal" class="modal">
+        <div class="modal-content bottom-sheet">
+            <h3>Editar Día</h3>
+            <div class="edit-section">
+                <h4>Turno de Flor</h4>
+                <label>Hora de Ingreso:</label>
+                <input type="time" id="florStartTime">
+                <button onclick="aplicarTurnoFlor()">Aplicar 9 horas automáticas</button>
+            </div>
+            <button id="closeModal">Cerrar y Guardar</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

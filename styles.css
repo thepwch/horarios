@@ -1,0 +1,87 @@
+:root {
+    --color-m: #A5D6A7; /* Verde Miraflores */
+    --color-g: #FFCC80; /* Naranja Guarangos */
+    --color-c: #CE93D8; /* Morado Calle 11 */
+    --color-f: #81D4FA; /* Azul Flor */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    font-size: 14px;
+}
+
+/* Contenedor clave para la responsividad móvil */
+.table-container {
+    width: 100%;
+    overflow-x: auto; /* Permite deslizar horizontalmente */
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: max-content;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    min-width: 40px;
+}
+
+/* Congelar la primera columna de horas */
+.sticky-col {
+    position: sticky;
+    left: 0;
+    background-color: #fff;
+    z-index: 2;
+    font-weight: bold;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+}
+
+thead th {
+    background-color: #666;
+    color: white;
+}
+
+.sub-header td {
+    background-color: #ddd;
+    font-weight: bold;
+}
+
+/* Clases de colores dinámicos */
+.celda-m { background-color: var(--color-m); }
+.celda-g { background-color: var(--color-g); }
+.celda-c { background-color: var(--color-c); }
+.celda-f { background-color: var(--color-f); }
+
+/* Estilos del Modal tipo Bottom Sheet */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 10;
+}
+
+.bottom-sheet {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: white;
+    border-radius: 15px 15px 0 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
