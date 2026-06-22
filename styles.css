@@ -21,10 +21,11 @@
    2. ESTRUCTURA BASE (Pantalla completa sin scroll fantasma)
    ========================================================= */
 html, body {
-    height: 100vh;
+    height: 100vh; /* Fallback para celulares antiguos */
+    height: 100dvh; /* Medida dinámica exacta del celular */
     margin: 0; 
     padding: 0;
-    overflow: hidden; /* Evita que rebote la página entera en iOS/Android */
+    overflow: hidden; 
     font-family: 'Inter', system-ui, sans-serif;
     background-color: var(--bg-app);
     color: var(--text-main);
@@ -81,7 +82,8 @@ table {
 }
 
 th, td { 
-    padding: 4px 0; text-align: center; font-size: 11px; border: none; 
+    padding: 2px 0; /* Antes era 4px. Más delgado para que la tabla sea más corta */
+    text-align: center; font-size: 11px; border: none; 
 }
 
 /* Columna de las horas (Izquierda) */
@@ -93,11 +95,11 @@ th, td {
     text-align: right; padding-right: 5px;
 }
 
-/* Fila de Días (Altos para presionar fácil) */
+/* Fila de Días */
 .dia-header { 
     font-size: 13px; font-weight: 700; background: var(--card-bg); 
     border-bottom: 1px solid #ddd; 
-    padding: 20px 5px; /* Altura extra para el dedo */
+    padding: 12px 5px; /* Antes era 20px. Reducido para ganar espacio vertical */
     cursor: pointer; vertical-align: middle; 
 }
 
@@ -117,8 +119,8 @@ th, td {
    5. NOTAS Y COMENTARIOS (Footer)
    ========================================================= */
 .comentarios-section {
-    flex: 0 0 auto; /* Tamaño estricto, no se estira ni se encoge */
-    height: 120px;
+    flex: 0 0 auto; 
+    height: 100px; /* Antes era 120px */
     padding: 10px 15px;
     background: #fff;
     border-top: 1px solid #eee;
@@ -129,7 +131,8 @@ th, td {
 }
 
 .comentarios-lista { 
-    height: 75px; overflow-y: auto; padding-right: 10px; 
+    height: 60px; /* Antes era 75px */
+    overflow-y: auto; padding-right: 10px; 
 }
 
 .comentarios-lista p { 
