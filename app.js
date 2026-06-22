@@ -31,7 +31,14 @@ const diasSemana = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sába
 //let semanaActualId = "2026-W25"; 
 
 // Variable para saber la fecha exacta que el usuario está mirando en pantalla
-let fechaActualVista = new Date(); // Inicia con el día de hoy
+// Busca esta línea en tu app.js (está cerca de donde declaras las variables globales) 
+
+// REEMPLÁZALA POR ESTO:
+let fechaActualVista = new Date();
+if (fechaActualVista.getDay() === 0) { // 0 significa Domingo
+    fechaActualVista.setDate(fechaActualVista.getDate() + 1); // Saltamos al lunes
+}
+
 let semanaActualId = ""; // Se calculará automáticamente
 
 // --- REQUISITO FUNCIONAL: LÓGICA DE PLANTILLAS ---

@@ -71,11 +71,15 @@ th, td {
     padding-right: 5px;
 }
 
+/* Aumentamos el padding superior e inferior de los encabezados */
 .dia-header { 
-    font-size: 11px; 
+    font-size: 13px; /* Un poco más grande para que se lea bien */
     font-weight: 700; 
     background: var(--card-bg); 
     border-bottom: 1px solid #ddd;
+    padding: 12px 5px; /* Aumentamos el padding para hacerlo más alto */
+    cursor: pointer;
+    vertical-align: middle;
 }
 
 /* Letras O y F más pequeñas */
