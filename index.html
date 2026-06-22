@@ -2,30 +2,32 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horarios Oli y Flor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Horarios</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header class="app-header">
-        <button id="prevWeek">&lt;</button>
-        <h2 id="weekTitle">Semana del 11 al 17 de Mayo</h2>
-        <button id="nextWeek">&gt;</button>
+        <button id="prevWeek" class="icon-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+        </button>
+        <h2 id="weekTitle">Cargando semana...</h2>
+        <button id="nextWeek" class="icon-btn">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
     </header>
-    <script type="module" src="app.js"></script>
     
     <main class="table-container">
         <table id="horarioTable">
             <thead>
-                <tr>
+                <tr id="headerDias">
                     <th class="sticky-col">Horario</th>
-                    <th colspan="2">Lun 11 (Miraflores)</th>
-                    <th colspan="2">Mie 13 (Guarangos)</th>
                 </tr>
-                <tr class="sub-header">
-                    <td class="sticky-col">Entidad</td>
-                    <td>Oli</td><td>Flor</td>
-                    <td>Oli</td><td>Flor</td>
+                <tr id="subHeaderEntidades" class=\"sub-header\">
+                    <td class="sticky-col" style="font-size: 12px; color: #888;">Entidad</td>
                 </tr>
             </thead>
             <tbody id="tableBody">
@@ -33,19 +35,56 @@
         </table>
     </main>
 
-    <div id="editModal" class="modal">
-        <div class="modal-content bottom-sheet">
-            <h3>Editar Día</h3>
-            <div class="edit-section">
-                <h4>Turno de Flor</h4>
-                <label>Hora de Ingreso:</label>
-                <input type="time" id="florStartTime">
-                <button onclick="aplicarTurnoFlor()">Aplicar 9 horas automáticas</button>
+    <div class="comentarios-section">
+        <h3>📝 Notas de la Semana</h3>
+        <div id="listaComentarios" class="comentarios-lista">
             </div>
-            <button id="closeModal">Cerrar y Guardar</button>
+    </div>
+
+    <div id="editModal" class="modal">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content bottom-sheet">
+            <div class="drag-handle"></div>
+            
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 id="modalTitle" style="margin:0; font-size: 20px;">Editar Día</h3>
+                <span id="closeModal" class="close-btn">&times;</span>
+            </div>
+
+            <div class="card card-oli">
+                <strong>📍 Dónde está Oli:</strong>
+                <div class="input-row">
+                    <label>Desde:<br> <select id="oliDesde"></select></label>
+                    <label>Hasta:<br> <select id="oliHasta"></select></label>
+                </div>
+                <div class="radio-group">
+                    <label><input type="radio" name="oliUbicacion" value="M" checked> <span>Miraflores</span></label>
+                    <label><input type="radio" name="oliUbicacion" value="G"> <span>Guarangos</span></label>
+                    <label><input type="radio" name="oliUbicacion" value="C"> <span>Calle 11</span></label>
+                </div>
+                <button onclick="aplicarBloqueOli()" class="btn btn-outline">Aplicar a pantalla</button>
+            </div>
+
+            <div class="card card-flor">
+                <strong>👩‍🍼 Turno de Flor:</strong>
+                <div style="margin-top: 10px;">
+                    <label>Hora de Ingreso: <select id="florIngreso" style="width:100%; margin-top:5px;"></select></label>
+                </div>
+                <p class="hint-text">* Se asignarán 9 horas consecutivas.</p>
+                <button onclick="aplicarTurnoFlor()" class="btn btn-outline" style="background:white;">Calcular Turno</button>
+            </div>
+
+            <div style="margin-bottom:20px;">
+                <strong>Comentarios del día:</strong>
+                <textarea id="comentariosDia" placeholder="Ej: Cita médica a las 4pm..."></textarea>
+            </div>
+
+            <button onclick="guardarDiaEnFirebase()" class="btn btn-primary">
+                Guardar Cambios
+            </button>
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script type="module" src="app.js"></script>
 </body>
 </html>
