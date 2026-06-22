@@ -1,3 +1,6 @@
+/* =========================================================
+   1. VARIABLES Y REINICIO
+   ========================================================= */
 :root {
     --color-m: #A5D6A7; 
     --color-g: #FFCC80; 
@@ -9,215 +12,187 @@
     --card-bg: #ffffff;
 }
 
-* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-body {
-    font-family: 'Inter', system-ui, sans-serif;
-    margin: 0; padding: 0;
-    background-color: var(--bg-app);
-    color: var(--text-main);
-    padding-bottom: 30px;
+* { 
+    box-sizing: border-box; 
+    -webkit-tap-highlight-color: transparent; 
 }
 
-/* App Header (Estilo iOS/Android) */
+/* =========================================================
+   2. ESTRUCTURA BASE (Pantalla completa sin scroll fantasma)
+   ========================================================= */
+html, body {
+    height: 100vh;
+    margin: 0; 
+    padding: 0;
+    overflow: hidden; /* Evita que rebote la página entera en iOS/Android */
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--bg-app);
+    color: var(--text-main);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================================
+   3. ENCABEZADO (Header)
+   ========================================================= */
 .app-header {
     display: flex; justify-content: space-between; align-items: center;
     background-color: var(--card-bg);
-    padding: 15px 20px;
+    padding: 10px 15px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    position: sticky; top: 0; z-index: 100;
+    flex-shrink: 0; /* El header nunca se encoge */
+    z-index: 100;
 }
 
-#weekTitle { font-size: 16px; margin: 0; font-weight: 600; text-align: center; }
+#weekTitle { 
+    font-size: 16px; margin: 0; font-weight: 600; text-align: center; 
+}
 
+/* Botones < y > gigantes para dedos */
 .icon-btn {
     background: #f3f4f6; border: none; border-radius: 50%;
-    width: 40px; height: 40px;
+    width: 60px; height: 60px;
     display: flex; align-items: center; justify-content: center;
     color: var(--text-main); cursor: pointer;
 }
 .icon-btn:active { transform: scale(0.95); background: #e5e7eb; }
+.icon-btn svg { width: 32px; height: 32px; }
 
-/* Tabla Estilo Grid Moderno */
-/* --- TABLA COMPACTA MODO CELULAR --- */
+/* =========================================================
+   4. LA TABLA (Mágica y estirable)
+   ========================================================= */
 .table-container {
-    width: 100%; 
-    padding: 10px 5px; /* Menos espacio a los lados de la pantalla */
+    flex: 1 1 auto; /* Toma todo el espacio disponible en el medio */
+    overflow-y: auto;
+    width: 100%;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
 }
 
 table {
     width: 100%;
-    border-collapse: collapse; /* Elimina los espacios verticales entre celdas */
-    table-layout: fixed; /* Fuerza a que todo entre en la pantalla sin scrollear */
+    height: 100%; /* La tabla se estira para llenar su contenedor */
+    border-collapse: collapse;
+    table-layout: fixed;
 }
 
 th, td { 
-    padding: 4px 0; /* Reduce el relleno para ganar espacio */
-    text-align: center; 
-    font-size: 11px; /* Letra perfecta para móviles */
-    border: none; 
+    padding: 4px 0; text-align: center; font-size: 11px; border: none; 
 }
 
-/* Columna fija de las horas más angosta */
+/* Columna de las horas (Izquierda) */
 .sticky-col {
     position: sticky; left: 0;
     background-color: var(--bg-app);
-    z-index: 2; 
-    font-weight: 600; 
-    color: #4b5563;
-    width: 45px; /* Ancho estricto para dejar espacio a los días */
-    font-size: 9px; /* Más pequeño para que entre la palabra "Despertar" */
-    text-align: right;
-    padding-right: 5px;
+    z-index: 2; width: 45px;
+    font-weight: 600; color: #4b5563; font-size: 9px;
+    text-align: right; padding-right: 5px;
 }
 
-/* Aumentamos el padding superior e inferior de los encabezados */
+/* Fila de Días (Altos para presionar fácil) */
 .dia-header { 
-    font-size: 13px; /* Un poco más grande para que se lea bien */
-    font-weight: 700; 
-    background: var(--card-bg); 
-    border-bottom: 1px solid #ddd;
-    padding: 12px 5px; /* Aumentamos el padding para hacerlo más alto */
-    cursor: pointer;
-    vertical-align: middle;
+    font-size: 13px; font-weight: 700; background: var(--card-bg); 
+    border-bottom: 1px solid #ddd; 
+    padding: 20px 5px; /* Altura extra para el dedo */
+    cursor: pointer; vertical-align: middle; 
 }
 
-/* Letras O y F más pequeñas */
-.sub-header td {
-    font-size: 9px;
-    color: #888;
-    padding: 2px 0;
-    border-bottom: 1px solid #ddd;
+/* Fila de letras O y F */
+.sub-header td { 
+    font-size: 9px; color: #888; padding: 2px 0; border-bottom: 1px solid #ddd; 
 }
 
-/* Píldoras de colores SIN bordes redondos para que se unan verticalmente */
-.celda-m, .celda-g, .celda-c, .celda-f {
-    font-weight: 700; 
-    color: rgba(0,0,0,0.7);
-}
-.celda-m { background-color: var(--color-m); }
-.celda-g { background-color: var(--color-g); }
-.celda-c { background-color: var(--color-c); }
-.celda-f { background-color: var(--color-f); }
+/* Colores de celdas y separadores */
+.celda-m { background-color: var(--color-m); font-weight: 700; color: rgba(0,0,0,0.7); }
+.celda-g { background-color: var(--color-g); font-weight: 700; color: rgba(0,0,0,0.7); }
+.celda-c { background-color: var(--color-c); font-weight: 700; color: rgba(0,0,0,0.7); }
+.celda-f { background-color: var(--color-f); font-weight: 700; color: rgba(0,0,0,0.7); }
+.fin-dia { border-right: 3px solid var(--bg-app); } /* Línea blanca vertical */
 
-/* --- MAGIA: LA LÍNEA BLANCA VERTICAL ENTRE DÍAS --- */
-.fin-dia {
-    border-right: 3px solid var(--bg-app);
-}
-
-/* Panel de Comentarios */
-.comentarios-section { margin: 0 15px; padding: 20px; background: var(--card-bg); border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-.comentarios-section h3 { font-size: 16px; margin: 0 0 15px 0; color: var(--primary); }
-.comentarios-lista p { margin: 8px 0; font-size: 14px; line-height: 1.5; padding: 10px; background: #f9fafb; border-radius: 8px; }
-
-/* --- MODAL BOTTOM SHEET (LA MAGIA DE LA APP) --- */
-.modal {
-    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000;
-}
-.modal-overlay {
-    position: absolute; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.4); backdrop-filter: blur(2px);
-    opacity: 0; transition: opacity 0.3s ease;
-}
-.bottom-sheet {
-    position: absolute; bottom: 0; width: 100%; max-height: 90vh; overflow-y: auto;
-    background: var(--card-bg); border-radius: 24px 24px 0 0;
-    padding: 20px; box-shadow: 0 -10px 25px rgba(0,0,0,0.1);
-    transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+/* =========================================================
+   5. NOTAS Y COMENTARIOS (Footer)
+   ========================================================= */
+.comentarios-section {
+    flex: 0 0 auto; /* Tamaño estricto, no se estira ni se encoge */
+    height: 120px;
+    padding: 10px 15px;
+    background: #fff;
+    border-top: 1px solid #eee;
 }
 
-/* Clases para animar con JS */
+.comentarios-section h3 { 
+    font-size: 12px; color: #aaa; margin: 0 0 5px 0; text-transform: uppercase; 
+}
+
+.comentarios-lista { 
+    height: 75px; overflow-y: auto; padding-right: 10px; 
+}
+
+.comentarios-lista p { 
+    margin: 4px 0; font-size: 13px; padding-left: 15px; position: relative; line-height: 1.2; 
+}
+
+.comentarios-lista p::before { 
+    content: "•"; position: absolute; left: 0; color: #888; 
+}
+
+/* =========================================================
+   6. MODAL (Bottom Sheet nativo)
+   ========================================================= */
+.modal { 
+    display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; 
+}
+.modal-overlay { 
+    position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.4); 
+    backdrop-filter: blur(2px); opacity: 0; transition: opacity 0.3s ease; 
+}
+.bottom-sheet { 
+    position: absolute; bottom: 0; width: 100%; max-height: 90vh; overflow-y: auto; 
+    background: var(--card-bg); border-radius: 24px 24px 0 0; padding: 20px; 
+    box-shadow: 0 -10px 25px rgba(0,0,0,0.1); 
+    transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); 
+}
+
+/* Clases JS para animar el modal */
 .modal.show .modal-overlay { opacity: 1; }
 .modal.show .bottom-sheet { transform: translateY(0); }
 
 .drag-handle { width: 40px; height: 5px; background: #d1d5db; border-radius: 5px; margin: 0 auto 20px auto; }
 .close-btn { background: #f3f4f6; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; color: #6b7280; }
 
-/* Tarjetas internas del modal */
 .card { padding: 15px; border-radius: 12px; margin-bottom: 15px; }
 .card-oli { background: #f0fdf4; border: 1px solid #bbf7d0; }
 .card-flor { background: #eff6ff; border: 1px solid #bfdbfe; }
 
-/* Controles de Formulario Móviles */
+/* Formularios del modal */
 .input-row { display: flex; gap: 10px; margin-top: 10px; }
 .input-row label { flex: 1; font-size: 13px; font-weight: 500; color: #4b5563; }
-select, textarea {
-    width: 100%; padding: 12px; margin-top: 5px;
-    background: #ffffff; border: 1px solid #d1d5db; border-radius: 10px;
-    font-size: 16px; /* 16px evita que el iPhone haga zoom automático */
-    font-family: inherit; color: var(--text-main);
+select, textarea { 
+    width: 100%; padding: 12px; margin-top: 5px; background: #ffffff; 
+    border: 1px solid #d1d5db; border-radius: 10px; font-size: 16px; 
+    font-family: inherit; color: var(--text-main); 
 }
 textarea { height: 80px; resize: none; }
 
-/* Botones Modernos */
-.btn {
-    width: 100%; padding: 14px; border-radius: 12px; border: none;
-    font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.1s;
-}
+.btn { width: 100%; padding: 14px; border-radius: 12px; border: none; font-size: 16px; font-weight: 600; cursor: pointer; transition: transform 0.1s; }
 .btn:active { transform: scale(0.98); }
 .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2); }
 .btn-outline { background: white; border: 1px solid #d1d5db; color: var(--text-main); margin-top: 15px; }
 
-/* Radio Buttons Estilizados */
-/* Radio Buttons Estilizados con los colores de la tabla */
+/* Botones de radio con colores dinámicos */
 .radio-group { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
-.radio-group label {
-    flex: 1; text-align: center; background: white; border: 2px solid #e5e7eb;
-    border-radius: 10px; padding: 12px 5px; font-size: 13px; position: relative;
-    cursor: pointer; transition: all 0.2s;
+.radio-group label { 
+    flex: 1; text-align: center; background: white; border: 2px solid #e5e7eb; 
+    border-radius: 10px; padding: 12px 5px; font-size: 13px; position: relative; 
+    cursor: pointer; transition: all 0.2s; 
 }
 .radio-group input { position: absolute; opacity: 0; }
+.radio-group label:has(input[value="M"]:checked) { border-color: #2e7d32; background-color: var(--color-m); font-weight: bold; }
+.radio-group label:has(input[value="G"]:checked) { border-color: #ef6c00; background-color: var(--color-g); font-weight: bold; }
+.radio-group label:has(input[value="C"]:checked) { border-color: #7b1fa2; background-color: var(--color-c); font-weight: bold; }
 
-/* Efecto cuando se selecciona Miraflores (M) */
-.radio-group label:has(input[value="M"]:checked) { 
-    border-color: #2e7d32; background-color: var(--color-m); font-weight: bold; 
-}
-/* Efecto cuando se selecciona Guarangos (G) */
-.radio-group label:has(input[value="G"]:checked) { 
-    border-color: #ef6c00; background-color: var(--color-g); font-weight: bold; 
-}
-/* Efecto cuando se selecciona Calle 11 (C) */
-.radio-group label:has(input[value="C"]:checked) { 
-    border-color: #7b1fa2; background-color: var(--color-c); font-weight: bold; 
-}
 .hint-text { font-size: 12px; color: #6b7280; margin: 8px 0; }
-
-/* Asegura que el body ocupe toda la altura de la pantalla */
-body {
-    display: flex; flex-direction: column; height: 100vh; margin: 0;
-}
-
-/* La tabla ocupará todo el espacio disponible menos el footer de comentarios */
-.table-container {
-    flex: 1; /* Esto hace que la tabla "empuje" hacia abajo los comentarios */
-    overflow-y: auto; /* Scroll vertical para los horarios si son muchos */
-}
-
-/* Caja de comentarios minimalista y fija abajo */
-.comentarios-section {
-    height: 120px; /* Tamaño fijo para aprox 3 líneas + título */
-    padding: 10px 15px;
-    background: #fff;
-    border-top: 1px solid #eee;
-    flex-shrink: 0; /* No permite que se encoja */
-}
-
-.comentarios-lista {
-    height: 70px; /* Altura para ver solo 3 líneas */
-    overflow-y: auto; /* Scroll interno si hay más de 3 comentarios */
-    padding-right: 10px;
-}
-
-/* Estilo minimalista de bullets */
-.comentarios-lista p {
-    margin: 4px 0;
-    font-size: 13px;
-    padding-left: 15px;
-    position: relative;
-    line-height: 1.2;
-}
-
-.comentarios-lista p::before {
-    content: "•";
-    position: absolute; left: 0; color: #888;
-}
